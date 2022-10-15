@@ -1,6 +1,7 @@
 import numpy as np
 
-from input import slots
+from input import slots, new_slot_times
+from models.offer_eval import OfferEval
 from objects.airline import Airline
 from objects.flight import Flight
 from objects.offer import Offer
@@ -48,4 +49,7 @@ def make_offers(offers_list, air_couple):
             flights_a_list.extend([air_a.flights_couples[i][0], air_a.flights_couples[i][1]])
             flights_b_list.extend([air_b.flights_couples[j][0], air_b.flights_couples[j][1]])
             offer = Offer(number, air_a, air_b, flights_a_list, flights_b_list)
-            offers_list.append(offer)
+            offer_eval = OfferEval(offer, new_slot_times)
+            offer_eval.solve()
+            if offer.cost_reduction is not None:
+                offers_list.append(offer)

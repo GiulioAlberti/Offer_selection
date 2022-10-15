@@ -13,10 +13,21 @@ class Offer:
         self.indexes_b = np.array([flight.index for flight in flights_b])
         self.flights_both = np.concatenate((flights_a, flights_b))
         self.indexes_both = np.concatenate((self.indexes_a, self.indexes_b))
-        self.norm_cost = None
+        self.cost_reduction = None
+        self.new_indexes = []
 
     def __str__(self):
         return self.name
 
     def __repr__(self):
         return self.name
+
+    def is_incompatible_with(self, other_offer):
+        output = 0
+        for flight in self.flights_both:
+            if flight in other_offer.flights_both:
+                output = 1
+        return output
+
+    def set_cost_reduction(self, value):
+        self.cost_reduction = value
