@@ -1,3 +1,7 @@
+from itertools import combinations
+
+import numpy as np
+
 from objects.functions import sum_costs
 
 
@@ -11,6 +15,7 @@ class Airline:
         self.reduction_percentage = None
         self.flights = []
         self.flights_couples = []
+        self.flights_triples = []
 
     def __str__(self):
         return self.name
@@ -24,7 +29,14 @@ class Airline:
         self.reduction = self.final_costs - self.initial_costs
         self.reduction_percentage = self.reduction / self.initial_costs
 
-    def make_flights_couples(self):
-        for i in range(len(self.flights)):
-            for j in range(i + 1, len(self.flights)):
-                self.flights_couples.append((self.flights[i], self.flights[j]))
+    def make_flights_comb(self, number):
+        if number == 2:
+            # self.flights_couples = np.array(list(combinations(self.flights, number)))
+            for i in range(len(self.flights)):
+                for j in range(i + 1, len(self.flights)):
+                    max_points = max(self.flights[i].earlier_points + self.flights[j].later_points,
+                                     self.flights[i].later_points + self.flights[j].earlier_points)
+                    if max_points > 10:
+                        self.flights_couples.append((self.flights[i], self.flights[j]))
+        elif number == 3:
+            self.flights_triples = np.array(list(combinations(self.flights, number)))

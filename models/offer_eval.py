@@ -18,6 +18,8 @@ class OfferEval:
         for i in self.indexes:
             self.p.addConstr(quicksum(self.x[i, j] for j in self.indexes) == 1, name="c1[%s]" % i)
             self.p.addConstr(quicksum(self.x[j, i] for j in self.indexes) == 1, name="c2[%s]" % i)
+        for i in self.indexes: #elim same place
+            self.p.addConstr(self.x[i, i] == 0, name="ce[%s]" % i)
         for flight in self.offer.flights_both:
             self.p.addConstr(quicksum(
                 self.x[flight.index, j] for j in self.indexes if self.new_slot_times[j] < flight.eta) == 0,
@@ -51,4 +53,3 @@ class OfferEval:
                 for j in self.indexes:
                     if round(self.x[flight.index, j].x) == 1:
                         self.offer.new_indexes.append(j)
-

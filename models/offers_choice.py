@@ -17,7 +17,6 @@ class OffersChoice:
             for j in range(i):
                 self.M[i, j] = self.M[j, i] = self.offers[i].is_incompatible_with(self.offers[j])
         self.ones = np.ones(self.num_offers)
-        print(self.M)
 
     def set_constraints(self):
         self.p.addConstr(self.M @ self.x <= (self.ones - self.x) * self.num_offers, name="c")
@@ -30,11 +29,13 @@ class OffersChoice:
         self.set_constraints()
         self.set_objective()
         self.p.optimize()
+        print("objVal: ", self.p.ObjVal)
         print("Optimal offers: ")
         for i in range(self.num_offers):
             if round(self.x[i].x) == 1:
                 print(self.offers[i], self.offers[i].cost_reduction, "implies:")
                 for j in range(len(self.offers[i].flights_both)):
-                    print("The flight ", self.offers[i].flights_both[j], "(cost ",
-                          self.offers[i].flights_both[j].cost, self.offers[i].flights_both[j].norm_cost, ")",
-                          " is switched with flight of index", self.offers[i].new_indexes[j])
+                    print("The flight ", self.offers[i].flights_both[j], "(points later-earlier",
+                          self.offers[i].flights_both[j].later_points, self.offers[i].flights_both[j].earlier_points,
+                          ")",
+                          " is switched with index", self.offers[i].new_indexes[j])
