@@ -1,7 +1,7 @@
 import numpy as np
 
 from input import new_slot_times
-
+import matplotlib.pyplot as plt
 
 class Flight:
 
@@ -43,26 +43,33 @@ class Flight:
         sum_diff_values = {}
         for slope in np.linspace(0, 50, 50):
             for margin in np.linspace(0, 3 * max_delay // 4, 10):
-                for jump in np.linspace(10, 10 * max_delay, 10):
+                for jump in np.linspace(300, 9000, 20):
                     approx_cost_fun = lambda delay: 0 if delay < 0 else (
                             slope * delay + (0 if delay <= margin else jump))
                     sum_diff_values[(slope, margin, jump)] = sum(abs(self.normCostVect - np.array(
                         [approx_cost_fun(t - self.eta) for t in new_slot_times])))
         self.slope, self.margin, self.jump = min(sum_diff_values, key=sum_diff_values.get)
 
+        appr = lambda delay: 0 if delay < 0 else (
+                            self.slope * delay + (0 if delay <= self.margin else self.jump))
+        values = np.array([appr(t - self.eta) for t in new_slot_times])
+        plt.plot(new_slot_times, self.normCostVect, 'b-')
+        plt.plot(new_slot_times, values, 'g-')
+        plt.waitforbuttonpress()
+        plt.clf()
+
     def assign_points(self):
         if new_slot_times[self.index] > self.eta + self.margin:
             self.later_points = 100 / self.slope * (
                 0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.2 else 1)
             self.earlier_points = self.slope / 6 * (
-                0.2 * self.jump / (new_slot_times[-1] - self.eta) if (new_slot_times[
-                                                                          self.index] - self.eta - self.margin) <
-                                                                     new_slot_times[-1] / 10 else 1)
+                self.jump / 3000 if (new_slot_times[self.index] - self.eta - self.margin) < new_slot_times[-1] / 10 else 1)
         else:
-            self.later_points = 100 / self.slope * 10 * (new_slot_times[-1] - self.eta) / self.jump * (
-                0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.2 else 1)
+            self.later_points = 100 / self.slope * 4500 / self.jump * (
+                0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.1 else 1)
+
             self.earlier_points = self.slope / 6 * (
-                0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) > 0.8 else 1)
+                0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) > 0.9 else 1)
 
     def __repr__(self):
         return self.name

@@ -9,8 +9,8 @@ flights, airline_list = make_flights(airlines_name, cost_coefficients)
 for flight in flights:
     flight.get_best_appr()
     flight.assign_points()
-#    print(flight, flight.slope, flight.margin, flight.jump, flight.norm_cost)
-#    print(flight, flight.later_points, flight.earlier_points)
+    print(flight, flight.margin)
+#    print(flight, flight.later_points, flight.earlier_points, new_slot_times[flight.index] > flight.eta + flight.margin)
 air_couples = make_couples_air(airline_list)
 for airline in airline_list:
     airline.make_flights_comb(2)

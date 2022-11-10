@@ -1,11 +1,11 @@
 import numpy as np
 
-np.random.seed(76)
-num_flights = 45
+np.random.seed(21)
+num_flights = 40
 interval = 3
 interval_modifier = 2
 cost_coefficients = np.array(np.random.randint(1, 5, num_flights))
-airlines_name_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+airlines_name_list = ["A", "B", "C", "D", "E", "F", "G", "H"]
 #airlines_name_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
 airlines_name = np.random.choice(airlines_name_list, num_flights)
 # Not random:
