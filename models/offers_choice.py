@@ -35,7 +35,7 @@ class OffersChoice:
             if round(self.x[i].x) == 1:
                 print(self.offers[i], self.offers[i].cost_reduction, "implies:")
                 for j in range(len(self.offers[i].flights_both)):
-                    print("The flight ", self.offers[i].flights_both[j], "(points later-earlier",
-                          self.offers[i].flights_both[j].later_points, self.offers[i].flights_both[j].earlier_points,
+                    print("The flight ", self.offers[i].flights_both[j], "(points earlier-later",
+                          self.offers[i].flights_both[j].earlier_points, self.offers[i].flights_both[j].later_points,
                           ")",
                           " is switched with index", self.offers[i].new_indexes[j])

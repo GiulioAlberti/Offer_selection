@@ -36,8 +36,8 @@ class Airline:
                 for j in range(i + 1, len(self.flights)):
                     max_points = max(self.flights[i].earlier_points + self.flights[j].later_points,
                                      self.flights[i].later_points + self.flights[j].earlier_points)
-                    if max_points > 10 and abs(self.flights[i].index - self.flights[j].index) < 30:
-                    #if True:
+                    #if max_points > 10 and abs(self.flights[i].index - self.flights[j].index) < 30:
+                    if True:
                         self.flights_couples.append((self.flights[i], self.flights[j]))
         elif number == 3:
             self.flights_triples = np.array(list(combinations(self.flights, number)))
