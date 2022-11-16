@@ -46,28 +46,24 @@ def make_offers(offers_list, air_couple):
     for i in range(num_ac):
         for j in range(num_bc):
             number = len(offers_list)
-            flights_a_list = []
-            flights_b_list = []
-            flights_a_list.extend([air_a.flights_couples[i][0], air_a.flights_couples[i][1]])
-            flights_b_list.extend([air_b.flights_couples[j][0], air_b.flights_couples[j][1]])
-            offer = Offer(number, air_a, air_b, flights_a_list, flights_b_list)
+            offer = Offer(number, air_a, air_b, air_a.flights_couples[i], air_b.flights_couples[j])
             offer_eval = OfferEval(offer, new_slot_times)
             offer_eval.solve()
             if offer.cost_reduction is not None:
                 offers_list.append(offer)
-    num_at = len(air_a.flights_triples)
-    num_bt = len(air_b.flights_triples)
-    for i in range(num_at):
-        for j in range(num_bt):
-            number = len(offers_list)
-            flights_a_list = []
-            flights_b_list = []
-            flights_a_list.extend(
-                [air_a.flights_triples[i][0], air_a.flights_triples[i][1], air_a.flights_triples[i][2]])
-            flights_b_list.extend(
-                [air_b.flights_triples[j][0], air_b.flights_triples[j][1], air_b.flights_triples[j][2]])
-            offer = Offer(number, air_a, air_b, flights_a_list, flights_b_list)
-            offer_eval = OfferEval(offer, new_slot_times)
-            offer_eval.solve()
-            if offer.cost_reduction is not None:
-                offers_list.append(offer)
+    # num_at = len(air_a.flights_triples)
+    # num_bt = len(air_b.flights_triples)
+    # for i in range(num_at):
+    #     for j in range(num_bt):
+    #         number = len(offers_list)
+    #         flights_a_list = []
+    #         flights_b_list = []
+    #         flights_a_list.extend(
+    #             [air_a.flights_triples[i][0], air_a.flights_triples[i][1], air_a.flights_triples[i][2]])
+    #         flights_b_list.extend(
+    #             [air_b.flights_triples[j][0], air_b.flights_triples[j][1], air_b.flights_triples[j][2]])
+    #         offer = Offer(number, air_a, air_b, flights_a_list, flights_b_list)
+    #         offer_eval = OfferEval(offer, new_slot_times)
+    #         offer_eval.solve()
+    #         if offer.cost_reduction is not None:
+    #             offers_list.append(offer)

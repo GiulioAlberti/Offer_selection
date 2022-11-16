@@ -1,25 +1,23 @@
 from input import *
 from models.mincost import MinCost
-from models.offers_choice import OffersChoice
+from objects.functions2 import couples_eval, make_combinations_and_solve
 from objects.initializer import *
 
 flights, airline_list = make_flights(airlines_name, cost_coefficients, cost_kind="smj")
-print("flight, earlier, later, oltre salto, slope, margin, jump")
+print("flight, earlier, later, post salto, slope, margin, jump")
 for flight in flights:
     flight.assign_points()
-    print(flight, flight.earlier_points, flight.later_points, new_slot_times[flight.index] > flight.eta + flight.margin,
-          flight.slope, flight.margin, flight.jump)
+# for airline in airline_list:
+#     for flight in airline.flights:
+#         print(flight, flight.earlier_points, flight.later_points,
+#               new_slot_times[flight.index] > flight.eta + flight.margin, flight.slope, flight.margin, flight.jump)
 
 air_couples = make_couples_air(airline_list)
-for airline in airline_list:
-    airline.make_flights_comb(2)
-#   airline.make_flights_comb(3)
-offers_list = []
-for couple in air_couples:
-    make_offers(offers_list, couple)
-print(len(offers_list), " offers created")
-offers_choice = OffersChoice(offers_list)
-offers_choice.solve()
+
+Cut_reduction = make_combinations_and_solve(airline_list, air_couples, True)
+Best_reduction = make_combinations_and_solve(airline_list, air_couples, False)
+print("Percentage loss:", (Best_reduction - Cut_reduction) / Best_reduction *100)
+couples_eval(airline_list)
 
 # min_cost = MinCost(flights, airline_list, indexes, new_slot_times)
 # min_cost.solve()

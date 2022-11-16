@@ -70,7 +70,7 @@ class Flight:
     #     plt.waitforbuttonpress()
     #     plt.clf()
 
-    def assign_points(self):
+    def assign_points(self): # cambiare in somme dove sono incorrelati
         if new_slot_times[self.index] > self.eta + self.margin: #Oltre salto
             self.later_points = (1 / self.slope + (new_slot_times[-1] - new_slot_times[self.index]) / len(
                 new_slot_times)) * (0.5 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.1 else 1)
