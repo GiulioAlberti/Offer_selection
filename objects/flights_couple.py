@@ -10,6 +10,8 @@ class FlightsCouple:
 
     def select_in_solution(self):
         self.selected = True
+        self.fl_one.select_flight()
+        self.fl_two.select_flight()
 
     def __repr__(self):
         return self.name

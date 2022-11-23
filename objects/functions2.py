@@ -1,3 +1,4 @@
+import numpy as np
 from matplotlib import pyplot as plt
 
 from models.offers_choice import OffersChoice
@@ -10,17 +11,17 @@ def couples_eval(airline_list):
     values_used = [fc.points for fc in couples_used]
     values_not_used = [fc.points for fc in couples_not_used]
 
-    level = 10
-    plt.plot(values_used, 'g s')
-    plt.axhline(y=level)
-    plt.waitforbuttonpress()
-    plt.clf()
-    plt.plot(values_not_used, 'r s')
-    plt.axhline(y=level)
-    plt.waitforbuttonpress()
-    plt.clf()
+    level = 7
+    # plt.plot(values_used, 'g s')
+    # plt.axhline(y=level)
+    # plt.waitforbuttonpress()
+    # plt.clf()
+    # plt.plot(values_not_used, 'r s')
+    # plt.axhline(y=level)
+    # plt.waitforbuttonpress()
+    # plt.clf()
 
-    for lv in range(level, level + 10):
+    for lv in range(level - 1, level + 9):
         g_perc = 0
         r_perc = 0
         for val in values_used:
@@ -39,7 +40,24 @@ def make_combinations_and_solve(airline_list, air_couples, cut):
     offers_list = []
     for couple in air_couples:
         make_offers(offers_list, couple)
-    print(len(offers_list), " offers created")
+    num_off = len(offers_list)
+    print(num_off, " offers created")
     offers_choice = OffersChoice(offers_list)
     offers_choice.solve()
-    return offers_choice.sol
+    return num_off, offers_choice.sol
+
+
+def param_research(flights, param_vector1, sense):
+    flight_selection = [flight.is_selected for flight in flights]
+
+    for i in range(len(flights)):
+        plt.plot(i, param_vector1[i], color=('green' if flight_selection[i] else 'red'), marker='o', linestyle='')
+    if sense == 'later':
+        x = [flight.index for flight in flights if flight.change == 1]
+        for i in range(len(x)):
+            plt.plot([x[i], x[i]], [0, 8], 'k-')
+    if sense == 'earlier':
+        x = [flight.index for flight in flights if flight.change == -1]
+        for i in range(len(x)):
+            plt.plot([x[i], x[i]], [0, 8], 'k-')
+    plt.show()

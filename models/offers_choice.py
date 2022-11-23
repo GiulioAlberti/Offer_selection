@@ -41,4 +41,8 @@ class OffersChoice:
                     print("The flight ", self.offers[i].flights_both[j], "(points earlier-later",
                           self.offers[i].flights_both[j].earlier_points, self.offers[i].flights_both[j].later_points,
                           ")",
-                          " is switched with index", self.offers[i].new_indexes[j])
+                          "is switched to", self.offers[i].new_indexes[j])
+                    if self.offers[i].flights_both[j].index < self.offers[i].new_indexes[j]:
+                        self.offers[i].flights_both[j].change = 1
+                    else:
+                        self.offers[i].flights_both[j].change = -1

@@ -1,7 +1,7 @@
 import numpy as np
 
-np.random.seed(22)
-num_flights = 40
+np.random.seed(160)
+num_flights = 60
 interval = 3
 interval_modifier = 2
 total_int = interval * interval_modifier
@@ -15,8 +15,8 @@ jumps_vect = np.array(np.random.randint(10, 50, num_flights))
 
 cost_coefficients = np.array([(slopes_vect[fl], margins_vect[fl], jumps_vect[fl]) for fl in range(num_flights)])
 
-airlines_name_list = ["A", "B", "C", "D", "E", "F", "G", "H"]
-# airlines_name_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
+airlines_name_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"]
+# airlines_name_list = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W"]
 airlines_name = np.random.choice(airlines_name_list, num_flights)
 
 indexes = range(num_flights)

@@ -33,11 +33,13 @@ class Flight:
             cost_fun = lambda delay: 0 if delay < 0 else (self.cost * delay ** 2) / 2
         elif cost_kind == "smj":
             cost_fun = lambda delay: 0 if delay < 0 else (
-                        self.slope * delay + (0 if delay <= self.margin else self.jump))
+                    self.slope * delay + (0 if delay <= self.margin else self.jump))
         else:
             cost_fun = lambda delay: 0 if delay < 0 else self.cost * delay
 
         self.costVect = np.array([cost_fun(t - self.eta) for t in new_slot_times])
+        self.is_selected = False
+        self.change = 0
         # plt.plot(new_slot_times, self.costVect, 'b-')
         # plt.waitforbuttonpress()
         # plt.clf()
@@ -70,19 +72,42 @@ class Flight:
     #     plt.waitforbuttonpress()
     #     plt.clf()
 
-    def assign_points(self): # cambiare in somme dove sono incorrelati
-        if new_slot_times[self.index] > self.eta + self.margin: #Oltre salto
-            self.later_points = (1 / self.slope + (new_slot_times[-1] - new_slot_times[self.index]) / len(
-                new_slot_times)) * (0.5 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.1 else 1)
-            self.earlier_points = 5 * self.slope * (
-                self.jump / 50 if (new_slot_times[self.index] - self.eta - self.margin) < new_slot_times[
-                    -1] / 10 else 2) * (0.5 if (len(new_slot_times) - self.index) / len(new_slot_times) > 0.9 else 1)
-        else:                                                   #prima del salto
-            self.later_points = 1 / self.slope * 50 / self.jump * self.margin / len(new_slot_times) * (
-                0.5 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.1 else 1)
+    def assign_points(self):
+        # if new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
+        #     self.later_points = (1 / self.slope * (new_slot_times[-1] - new_slot_times[self.index]) / len(
+        #         new_slot_times)) * (0.25 if (len(new_slot_times) - self.index) / len(
+        #         new_slot_times) < 0.15 else 1)
+        #     self.earlier_points = 12 * self.slope + (
+        #         self.jump / 25 if (new_slot_times[self.index] - self.eta - self.margin) < new_slot_times[
+        #             -1] / 5 else 1 / 5) * (
+        #                               0.25 if (len(new_slot_times) - self.index) / len(
+        #                                   new_slot_times) > 0.85 else 1)
+        #
+        # else:  # prima del salto
+        #     self.later_points = 1 / self.slope * 25 / self.jump * self.margin / len(new_slot_times) * (
+        #         0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.15 else 1)
+        #
+        #     self.earlier_points = (12 * self.slope + (new_slot_times[self.index]) / len(new_slot_times)) * (
+        #         0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) > 0.85 else 1)
+        if new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
+            self.later_points = (1 / self.slope + (len(new_slot_times) - self.index) / len(
+                new_slot_times)) * (0.25 if (len(new_slot_times) - self.index) / len(
+                new_slot_times) < 0.15 else 1)
+            self.earlier_points = (12 * self.slope + (
+                self.jump / 25 if (new_slot_times[self.index] - self.eta - self.margin) < new_slot_times[
+                    -1] / 5 else 1 / 5)) * (              #qua forse cambiare per renderlo indip da lunghezza intervalli
+                                      0.25 if (len(new_slot_times) - self.index) / len(
+                                          new_slot_times) > 0.85 else 1)
 
-            self.earlier_points = (5 * self.slope + (new_slot_times[self.index]) / len(new_slot_times)) * (
-                0.5 if (len(new_slot_times) - self.index) / len(new_slot_times) > 0.9 else 1)
+        else:  # prima del salto
+            self.later_points = (1 / self.slope + 25 / self.jump * self.margin / len(new_slot_times)) * (    #qua forse cambiare per renderlo indip da lunghezza intervalli
+                0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) < 0.15 else 1)
+
+            self.earlier_points = (12 * self.slope + self.index / len(new_slot_times)) * (
+                0.25 if (len(new_slot_times) - self.index) / len(new_slot_times) > 0.85 else 1)
+
+    def select_flight(self):
+        self.is_selected = True
 
     def __repr__(self):
         return self.name
