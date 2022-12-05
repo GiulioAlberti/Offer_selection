@@ -11,7 +11,6 @@ def couples_eval(airline_list):
     values_used = [fc.points for fc in couples_used]
     values_not_used = [fc.points for fc in couples_not_used]
 
-    level = 7
     # plt.plot(values_used, 'g s')
     # plt.axhline(y=level)
     # plt.waitforbuttonpress()
@@ -20,8 +19,8 @@ def couples_eval(airline_list):
     # plt.axhline(y=level)
     # plt.waitforbuttonpress()
     # plt.clf()
-
-    for lv in range(level - 1, level + 9):
+    levels = np.linspace(2, 4, 9)
+    for lv in levels:
         g_perc = 0
         r_perc = 0
         for val in values_used:

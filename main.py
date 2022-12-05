@@ -4,11 +4,9 @@ from objects.functions2 import *
 from objects.initializer import *
 
 flights, airline_list = make_flights(airlines_name, cost_coefficients, cost_kind="smj")
-# print("flight, earlier, later, post salto, slope, margin, jump")
 for flight in flights:
     flight.assign_points()
-    # print(flight, flight.earlier_points, flight.later_points, new_slot_times[flight.index] > flight.eta + flight.margin,
-    #       flight.slope, flight.margin, flight.jump)
+    # print(flight, flight.earlier_points, flight.later_points, flight.slope, flight.margin, flight.jump, 10 * flight.slope, flight.jump / flight.margin)
 
 air_couples = make_couples_air(airline_list)
 

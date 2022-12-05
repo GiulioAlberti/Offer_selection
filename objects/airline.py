@@ -40,7 +40,7 @@ class Airline:
                     max_points = max(self.flights[i].earlier_points + self.flights[j].later_points,
                                      self.flights[i].later_points + self.flights[j].earlier_points)
                     if cut:
-                        if max_points > 9 and abs(self.flights[i].index - self.flights[j].index) < 35:
+                        if max_points > 3.5: #and abs(self.flights[i].index - self.flights[j].index) < 35:
                             self.flights_couples.append(FlightsCouple(self.flights[i], self.flights[j], max_points))
                     else:
                         self.flights_couples.append(FlightsCouple(self.flights[i], self.flights[j], max_points))
