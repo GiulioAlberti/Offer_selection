@@ -74,12 +74,12 @@ class Flight:
 
     def assign_points(self):
         if new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
-            self.later_points = 0
+            self.later_points = -10
             self.earlier_points = 20 * self.slope + self.jump / self.margin
 
         else:  # prima del salto
             self.later_points = 20 * (1 / 6 - self.slope) + self.jump / self.margin
-            self.earlier_points = 0
+            self.earlier_points = -10
 
         # if new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
         #     self.later_points = (1 / self.slope + (len(new_slot_times) - self.index) / len(

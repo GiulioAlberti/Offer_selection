@@ -1,6 +1,6 @@
 import numpy as np
 
-np.random.seed(24)
+np.random.seed(5678)
 num_flights = 45
 interval = 1
 interval_modifier = 2

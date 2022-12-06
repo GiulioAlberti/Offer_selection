@@ -1,8 +1,7 @@
 class FlightsCouple:
 
     def __init__(self, fl_one, fl_two, points):
-
-        self.name = "Couple " + str(fl_one) +" "+ str(fl_two)
+        self.name = "Couple " + str(fl_one) + " " + str(fl_two)
         self.fl_one = fl_one
         self.fl_two = fl_two
         self.points = points
