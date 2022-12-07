@@ -11,35 +11,35 @@ def couples_eval(airline_list):
     values_used = [fc.points for fc in couples_used]
     values_not_used = [fc.points for fc in couples_not_used]
 
-    figure, (ax, ax2) = plt.subplots(ncols=2, sharey=True)
+    figure, (ax, ax2) = plt.subplots(ncols=2)
     ax.plot(values_used, 'g s')
-    ax.axhline(y=3.25)
+    ax.axhline(y=10)
     ax.set_title("Used")
     ax2.plot(values_not_used, 'r s')
-    ax2.axhline(y=3.25)
+    ax2.axhline(y=10)
     ax2.set_title("Not Used")
     plt.show()
     plt.clf()
-    levels = np.linspace(2, 4, 9)
-    for lv in levels:
-        g_perc = 0
-        r_perc = 0
-        for val in values_used:
-            if val > lv:
-                g_perc += 100 / len(values_used)
-        for val in values_not_used:
-            if val <= lv:
-                r_perc += 100 / len(values_not_used)
-        print(lv, g_perc, r_perc)
+    # levels = np.linspace(9, 13, 9)
+    # for lv in levels:
+    #     g_perc = 0
+    #     r_perc = 0
+    #     for val in values_used:
+    #         if val > lv:
+    #             g_perc += 100 / len(values_used)
+    #     for val in values_not_used:
+    #         if val <= lv:
+    #             r_perc += 100 / len(values_not_used)
+    #     print(lv, g_perc, r_perc)
 
 
-def make_combinations_and_solve(airline_list, air_couples, cut):
+def make_combinations_and_solve(airline_list, air_couples, new_slot_times, cut):
     for airline in airline_list:
         airline.make_flights_comb(2, cut)
     #   airline.make_flights_comb(3, cut)
     offers_list = []
     for couple in air_couples:
-        make_offers(offers_list, couple)
+        make_offers(offers_list, couple, new_slot_times)
     num_off = len(offers_list)
     print(num_off, " offers created")
     offers_choice = OffersChoice(offers_list)

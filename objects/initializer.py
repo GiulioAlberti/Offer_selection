@@ -1,24 +1,26 @@
 import numpy as np
 
-from input import slots, new_slot_times
+from input import InputGenerator
 from models.offer_eval import OfferEval
 from objects.airline import Airline
 from objects.flight import Flight
 from objects.offer import Offer
 
 
-def make_flights(airlines_names, cost_coefficients, cost_kind):
+def make_flights(instance: InputGenerator):
+    airlines_names, slots, cost_kind, cost_coefficients = \
+        instance.airlines_names, instance.slots, instance.cost_kind, instance.cost_coefficients
     airlines = [Airline(air_name) for air_name in np.unique(airlines_names)]
     airlines_dict = dict(zip([air.name for air in airlines], airlines))
     flights = []
     if cost_kind == "smj":
         for i in range(len(airlines_names)):
             flights.append(
-                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i, :], cost_kind))
+                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i, :], cost_kind, instance.new_slot_times))
     if cost_kind == "quad":
         for i in range(len(airlines_names)):
             flights.append(
-                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i], cost_kind))
+                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i], cost_kind, instance.new_slot_times))
         for air in airlines:
             normalise_flights(air)
     return flights, airlines
@@ -38,7 +40,7 @@ def make_couples_air(airline_list):
     return couples
 
 
-def make_offers(offers_list, air_couple):
+def make_offers(offers_list, air_couple, new_slot_times):
     air_a = air_couple[0]
     air_b = air_couple[1]
     num_ac = len(air_a.flights_couples)

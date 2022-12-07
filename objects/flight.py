@@ -1,12 +1,10 @@
 import numpy as np
-
-from input import new_slot_times
 import matplotlib.pyplot as plt
 
 
 class Flight:
 
-    def __init__(self, index, slot, airline, cost_coefficients, cost_kind):
+    def __init__(self, index, slot, airline, cost_coefficients, cost_kind, new_slot_times):
 
         self.name = "F" + airline.name + str(index)
         self.airline = airline
@@ -15,6 +13,7 @@ class Flight:
         self.eta = slot
         self.sol = None
         self.cost_kind = cost_kind
+        self.new_slot_times = new_slot_times
 
         if cost_kind == "quad":
             self.cost = cost_coefficients
@@ -37,7 +36,7 @@ class Flight:
         else:
             cost_fun = lambda delay: 0 if delay < 0 else self.cost * delay
 
-        self.costVect = np.array([cost_fun(t - self.eta) for t in new_slot_times])
+        self.costVect = np.array([cost_fun(t - self.eta) for t in self.new_slot_times])
         self.is_selected = False
         self.change = 0
         # plt.plot(new_slot_times, self.costVect, 'b-')
@@ -50,7 +49,7 @@ class Flight:
             norm_cost_fun = lambda delay: 0 if delay < 0 else (self.norm_cost * delay ** 2) / 2
         else:
             norm_cost_fun = lambda delay: 0 if delay < 0 else self.norm_cost * delay
-        self.normCostVect = np.array([norm_cost_fun(t - self.eta) for t in new_slot_times])
+        self.normCostVect = np.array([norm_cost_fun(t - self.eta) for t in self.new_slot_times])
 
     # def get_best_appr(self):
     #     max_delay = new_slot_times[-1] - self.eta
@@ -73,13 +72,13 @@ class Flight:
     #     plt.clf()
 
     def assign_points(self):
-        if new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
-            self.later_points = -10
-            self.earlier_points = 20 * self.slope + self.jump / self.margin
+        if self.new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
+            self.later_points = -30
+            self.earlier_points = 30 * self.slope**(1/2) + self.jump / self.margin * 10
 
         else:  # prima del salto
-            self.later_points = 20 * (1 / 6 - self.slope) + self.jump / self.margin
-            self.earlier_points = -10
+            self.later_points = 30 * (1 / 6 - self.slope)**(1/2) + self.margin / self.jump
+            self.earlier_points = -30
 
         # if new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
         #     self.later_points = (1 / self.slope + (len(new_slot_times) - self.index) / len(

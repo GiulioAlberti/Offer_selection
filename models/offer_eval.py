@@ -21,6 +21,8 @@ class OfferEval:
             self.p.addConstr(quicksum(self.x[j, i] for j in self.indexes) == 1, name="c2[%s]" % i)
         for i in self.indexes:  # elim same place
             self.p.addConstr(self.x[i, i] == 0, name="ce[%s]" % i)
+            # elim finti scambi fra compagnie (aggiustare poi nel caso di triple di aerei)
+        self.p.addConstr(quicksum(self.x[i, j] for i in self.offer.indexes_a for j in self.offer.indexes_a) <= 1, name="cex")
         for flight in self.offer.flights_both:
             self.p.addConstr(quicksum(
                 self.x[flight.index, j] for j in self.indexes if self.new_slot_times[j] < flight.eta) == 0,
