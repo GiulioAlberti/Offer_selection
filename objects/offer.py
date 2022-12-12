@@ -1,9 +1,11 @@
 import numpy as np
 
+from objects.airline import Airline
+
 
 class Offer:
 
-    def __init__(self, number, airline_a, airline_b, a_couple, b_couple):
+    def __init__(self, number, airline_a: Airline, airline_b: Airline, a_couple, b_couple):
         self.name = str(number) + airline_a.name + airline_b.name
         self.airline_a = airline_a
         self.airline_b = airline_b

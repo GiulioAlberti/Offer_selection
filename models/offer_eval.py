@@ -1,11 +1,13 @@
 import gurobipy as gb
 from gurobipy import GRB, quicksum
 
+from objects.offer import Offer
+
 
 # nel caso di quadratic, sostituire costVect con NormCostVect
 class OfferEval:
 
-    def __init__(self, offer, new_slot_times):
+    def __init__(self, offer: Offer, new_slot_times):
         self.p = gb.Model()
         self.p.modelSense = GRB.MINIMIZE
         self.offer = offer

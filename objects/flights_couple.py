@@ -1,6 +1,9 @@
+from objects.flight import Flight
+
+
 class FlightsCouple:
 
-    def __init__(self, fl_one, fl_two, points):
+    def __init__(self, fl_one: Flight, fl_two: Flight, points):
         self.name = "Couple " + str(fl_one) + " " + str(fl_two)
         self.fl_one = fl_one
         self.fl_two = fl_two

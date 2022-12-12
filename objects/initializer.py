@@ -16,17 +16,19 @@ def make_flights(instance: InputGenerator):
     if cost_kind == "smj":
         for i in range(len(airlines_names)):
             flights.append(
-                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i, :], cost_kind, instance.new_slot_times))
+                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i, :], cost_kind,
+                       instance.new_slot_times))
     if cost_kind == "quad":
         for i in range(len(airlines_names)):
             flights.append(
-                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i], cost_kind, instance.new_slot_times))
+                Flight(i, slots[i], airlines_dict[airlines_names[i]], cost_coefficients[i], cost_kind,
+                       instance.new_slot_times))
         for air in airlines:
             normalise_flights(air)
     return flights, airlines
 
 
-def normalise_flights(airline):
+def normalise_flights(airline: Airline):
     max_cost = max([flight.cost for flight in airline.flights])
     for flight in airline.flights:
         flight.normalise(max_cost)
