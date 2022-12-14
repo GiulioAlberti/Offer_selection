@@ -11,7 +11,7 @@ class OfferEval:
         self.p = gb.Model()
         self.p.modelSense = GRB.MINIMIZE
         self.offer = offer
-        self.eps = 0.01
+        self.eps = 0.0001
         self.slots = offer.slots_both
         self.new_slot_times = new_slot_times
         self.p.setParam('OutputFlag', 0)
@@ -21,8 +21,8 @@ class OfferEval:
         for i in self.slots:
             self.p.addConstr(quicksum(self.x[i, j] for j in self.slots) == 1, name="c1[%s]" % i)
             self.p.addConstr(quicksum(self.x[j, i] for j in self.slots) == 1, name="c2[%s]" % i)
-        for i in self.slots:  # elim same place
-            self.p.addConstr(self.x[i, i] == 0, name="ce[%s]" % i)
+        # for i in self.slots:  # elim same place
+        #     self.p.addConstr(self.x[i, i] == 0, name="ce[%s]" % i)
         for flight in self.offer.flights_both:
             self.p.addConstr(quicksum(
                 self.x[flight.slot, j] for j in self.slots if j.time < flight.eta) == 0,
