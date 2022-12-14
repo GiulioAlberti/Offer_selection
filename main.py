@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from instance_generator import InstanceGenerator
 from utils.functions import sum_costs
@@ -36,21 +37,21 @@ for seed in range(43, 44):
 #     cr = np.append(cr, Cut_reduction)
 #     br = np.append(br, Best_reduction)
 #
-# df = pd.DataFrame(
-#     {'seed': s_, 'total_initial': tot_in, 'num_off_cut': noc,
-#      'num_off_best': nob, 'cut_reduction': cr,
-#      'best_reduction': br})
-#
-# df['cut_over_total'] = df.cut_reduction / df.total_initial
-# df['best_over_total'] = df.best_reduction / df.total_initial
-# df['off_cut_over_best'] = df.num_off_cut / df.num_off_best
-# df.to_csv('60_7_Y.csv', index_label=False, index=False)
-#
-# df2 = pd.DataFrame(
-#     {'cut_over_total_mean': np.array([df['cut_over_total'].mean()]),
-#      'best_over_total_mean': np.array([df['best_over_total'].mean()]),
-#      'off_cut_over_best_mean': np.array([df['off_cut_over_best'].mean()])})
-# df2.to_csv('60_7_Y.csv', index_label=False, index=False, mode='a')
+df = pd.DataFrame(
+    {'seed': s_, 'total_initial': tot_in, 'num_off_cut': noc,
+     'num_off_best': nob, 'cut_reduction': cr,
+     'best_reduction': br})
+
+df['cut_over_total'] = df.cut_reduction / df.total_initial
+df['best_over_total'] = df.best_reduction / df.total_initial
+df['off_cut_over_best'] = df.num_off_cut / df.num_off_best
+df.to_csv('60_7_Y.csv', index_label=False, index=False)
+
+df2 = pd.DataFrame(
+    {'cut_over_total_mean': np.array([df['cut_over_total'].mean()]),
+     'best_over_total_mean': np.array([df['best_over_total'].mean()]),
+     'off_cut_over_best_mean': np.array([df['off_cut_over_best'].mean()])})
+df2.to_csv('60_7_Y.csv', index_label=False, index=False, mode='a')
 
 # pd.read_csv('namefile.csv')
 
