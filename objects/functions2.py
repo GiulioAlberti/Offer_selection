@@ -34,19 +34,3 @@ def make_combinations_and_solve(airline_list, air_couples, new_slot_times, cut):
     offers_choice = OffersChoice(offers_list)
     offers_choice.solve()
     return num_off, offers_choice.sol
-
-
-def param_research(flights, param_vector1, sense):
-    flight_selection = [flight.is_selected for flight in flights]
-
-    for i in range(len(flights)):
-        plt.plot(i, param_vector1[i], color=('green' if flight_selection[i] else 'red'), marker='o', linestyle='')
-    if sense == 'later':
-        x = [flight.index for flight in flights if flight.change == 1]  #qua da vedere se index o slot.index
-        for i in range(len(x)):
-            plt.plot([x[i], x[i]], [0, 8], 'k-')
-    if sense == 'earlier':
-        x = [flight.index for flight in flights if flight.change == -1] #qua da vedere se index o slot.index
-        for i in range(len(x)):
-            plt.plot([x[i], x[i]], [0, 8], 'k-')
-    plt.show()
