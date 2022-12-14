@@ -1,7 +1,7 @@
 import gurobipy as gb
 from gurobipy import GRB, quicksum
 
-from objects.functions import sum_costs
+from utils.functions import sum_costs
 
 
 class MinCost:

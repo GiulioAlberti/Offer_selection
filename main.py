@@ -1,11 +1,9 @@
 import numpy as np
-import pandas as pd
 
 from input import InputGenerator
-from models.mincost import MinCost
-from objects.functions import sum_costs
-from objects.functions2 import make_combinations_and_solve, couples_eval
-from objects.initializer import make_flights, make_couples_air
+from utils.functions import sum_costs
+from utils.functions2 import make_combinations_and_solve, couples_eval
+from utils.initializer import make_flights, make_couples_air
 
 s_, tot_in, noc, nob, cr, br = np.array([]), np.array([]), np.array([]), np.array([]), np.array([]), np.array([])
 

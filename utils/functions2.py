@@ -1,8 +1,7 @@
-import numpy as np
 from matplotlib import pyplot as plt
 
 from models.offers_choice import OffersChoice
-from objects.initializer import make_offers
+from utils.initializer import make_offers
 
 
 def couples_eval(airline_list):

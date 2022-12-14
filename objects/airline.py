@@ -4,7 +4,7 @@ import numpy as np
 
 from models.localoptim import LocalOptim
 from objects.flights_couple import FlightsCouple
-from objects.functions import sum_costs
+from utils.functions import sum_costs
 
 
 class Airline:
