@@ -1,13 +1,13 @@
 import numpy as np
 
-from input import InputGenerator
+from instance_generator import InstanceGenerator
 from models.offer_eval import OfferEval
 from objects.airline import Airline
 from objects.flight import Flight
 from objects.offer import Offer
 
 
-def make_flights(instance: InputGenerator):
+def make_flights(instance: InstanceGenerator):
     airlines_names, slots, cost_kind, cost_coefficients = \
         instance.airlines_names, instance.slots, instance.cost_kind, instance.cost_coefficients
     airlines = [Airline(air_name) for air_name in np.unique(airlines_names)]

@@ -1,6 +1,6 @@
 import numpy as np
 
-from input import InputGenerator
+from instance_generator import InstanceGenerator
 from utils.functions import sum_costs
 from utils.functions2 import make_combinations_and_solve, couples_eval
 from utils.initializer import make_flights, make_couples_air
@@ -9,7 +9,7 @@ s_, tot_in, noc, nob, cr, br = np.array([]), np.array([]), np.array([]), np.arra
 
 for seed in range(43, 44):
     print('Seed:', seed)
-    instance = InputGenerator(seed=seed, num_flights=60, interval=1, interval_modifier=2, cost_kind="smj")
+    instance = InstanceGenerator(seed=seed, num_flights=60, interval=1, interval_modifier=2, cost_kind="smj")
 
     flights, airline_list = make_flights(instance)
     for airline in airline_list:

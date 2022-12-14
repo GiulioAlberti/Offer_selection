@@ -3,7 +3,7 @@ import numpy as np
 from objects.slot import Slot
 
 
-class InputGenerator:
+class InstanceGenerator:
 
     def __init__(self, seed, num_flights, interval, interval_modifier, cost_kind):
         self.cost_kind = cost_kind
