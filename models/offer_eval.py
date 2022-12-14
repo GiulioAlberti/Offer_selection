@@ -12,38 +12,36 @@ class OfferEval:
         self.p.modelSense = GRB.MINIMIZE
         self.offer = offer
         self.eps = 0.01
-        self.indexes = offer.indexes_both
+        self.slots = offer.slots_both
         self.new_slot_times = new_slot_times
         self.p.setParam('OutputFlag', 0)
-        self.x = self.p.addVars([(i, j) for i in self.indexes for j in self.indexes], vtype=GRB.BINARY)
+        self.x = self.p.addVars([(i, j) for i in self.slots for j in self.slots], vtype=GRB.BINARY)
 
     def set_constraints(self):
-        for i in self.indexes:
-            self.p.addConstr(quicksum(self.x[i, j] for j in self.indexes) == 1, name="c1[%s]" % i)
-            self.p.addConstr(quicksum(self.x[j, i] for j in self.indexes) == 1, name="c2[%s]" % i)
-        for i in self.indexes:  # elim same place
+        for i in self.slots:
+            self.p.addConstr(quicksum(self.x[i, j] for j in self.slots) == 1, name="c1[%s]" % i)
+            self.p.addConstr(quicksum(self.x[j, i] for j in self.slots) == 1, name="c2[%s]" % i)
+        for i in self.slots:  # elim same place
             self.p.addConstr(self.x[i, i] == 0, name="ce[%s]" % i)
-            # elim finti scambi fra compagnie (aggiustare poi nel caso di triple di aerei)
-        self.p.addConstr(quicksum(self.x[i, j] for i in self.offer.indexes_a for j in self.offer.indexes_a) <= 1, name="cex")
         for flight in self.offer.flights_both:
             self.p.addConstr(quicksum(
-                self.x[flight.index, j] for j in self.indexes if self.new_slot_times[j] < flight.eta) == 0,
+                self.x[flight.slot, j] for j in self.slots if j.time < flight.eta) == 0,
                              name="c3[%s]" % flight)
         self.p.addConstr(quicksum(
-            self.x[flight.index, j] * flight.costVect[j] for flight in self.offer.flights_a for j in
-            self.indexes) <= quicksum(
-            flight.costVect[flight.index] for flight in self.offer.flights_a) - self.eps,
+            self.x[flight.slot, j] * flight.costVect[j.index] for flight in self.offer.flights_a for j in
+            self.slots) <= quicksum(
+            flight.costVect[flight.slot.index] for flight in self.offer.flights_a) - self.eps,
                          name="c4a")
         self.p.addConstr(quicksum(
-            self.x[flight.index, j] * flight.costVect[j] for flight in self.offer.flights_b for j in
-            self.indexes) <= quicksum(
-            flight.costVect[flight.index] for flight in self.offer.flights_b) - self.eps,
+            self.x[flight.slot, j] * flight.costVect[j.index] for flight in self.offer.flights_b for j in
+            self.slots) <= quicksum(
+            flight.costVect[flight.slot.index] for flight in self.offer.flights_b) - self.eps,
                          name="c4b")
 
     def set_objective(self):
         self.p.setObjective(
-            quicksum(self.x[flight.index, j] * flight.costVect[j] for flight in self.offer.flights_both for j in
-                     self.indexes))
+            quicksum(self.x[flight.slot, j] * flight.costVect[j.index] for flight in self.offer.flights_both for j in
+                     self.slots))
 
     def solve(self):
         self.set_constraints()
@@ -52,9 +50,9 @@ class OfferEval:
         status = self.p.Status
         if status == GRB.OPTIMAL:
             cost_reduction = sum(
-                flight.costVect[flight.index] for flight in self.offer.flights_both) - self.p.objVal
+                flight.costVect[flight.slot.index] for flight in self.offer.flights_both) - self.p.objVal
             self.offer.set_cost_reduction(cost_reduction)
             for flight in self.offer.flights_both:
-                for j in self.indexes:
-                    if round(self.x[flight.index, j].x) == 1:
-                        self.offer.new_indexes.append(j)
+                for j in self.slots:
+                    if round(self.x[flight.slot, j].x) == 1:
+                        self.offer.new_slots.append(j)

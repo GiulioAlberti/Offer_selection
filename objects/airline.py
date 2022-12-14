@@ -2,6 +2,7 @@ from itertools import combinations
 
 import numpy as np
 
+from models.localoptim import LocalOptim
 from objects.flights_couple import FlightsCouple
 from objects.functions import sum_costs
 
@@ -37,10 +38,14 @@ class Airline:
                     max_points = max(self.flights[i].earlier_points + self.flights[j].later_points,
                                      self.flights[i].later_points + self.flights[j].earlier_points)
                     if cut:
-                        if max_points > -13:
+                        if max_points > 0:
                             self.flights_couples.append(FlightsCouple(self.flights[i], self.flights[j], max_points))
                     else:
                         self.flights_couples.append(FlightsCouple(self.flights[i], self.flights[j], max_points))
 
         elif number == 3:
             self.flights_triples = np.array(list(combinations(self.flights, number)))
+
+    def optimise_own_flights(self):
+        lo = LocalOptim(self.flights)
+        lo.solve()

@@ -13,24 +13,13 @@ def couples_eval(airline_list):
 
     figure, (ax, ax2) = plt.subplots(ncols=2, sharey="all")
     ax.plot(values_used, 'g s')
-    ax.axhline(y=-13)
+    ax.axhline(y=-5)
     ax.set_title("Used")
     ax2.plot(values_not_used, 'r s')
-    ax2.axhline(y=-13)
+    ax2.axhline(y=-5)
     ax2.set_title("Not Used")
     plt.show()
     plt.clf()
-    # levels = np.linspace(9, 13, 9)
-    # for lv in levels:
-    #     g_perc = 0
-    #     r_perc = 0
-    #     for val in values_used:
-    #         if val > lv:
-    #             g_perc += 100 / len(values_used)
-    #     for val in values_not_used:
-    #         if val <= lv:
-    #             r_perc += 100 / len(values_not_used)
-    #     print(lv, g_perc, r_perc)
 
 
 def make_combinations_and_solve(airline_list, air_couples, new_slot_times, cut):
@@ -53,11 +42,11 @@ def param_research(flights, param_vector1, sense):
     for i in range(len(flights)):
         plt.plot(i, param_vector1[i], color=('green' if flight_selection[i] else 'red'), marker='o', linestyle='')
     if sense == 'later':
-        x = [flight.index for flight in flights if flight.change == 1]
+        x = [flight.index for flight in flights if flight.change == 1]  #qua da vedere se index o slot.index
         for i in range(len(x)):
             plt.plot([x[i], x[i]], [0, 8], 'k-')
     if sense == 'earlier':
-        x = [flight.index for flight in flights if flight.change == -1]
+        x = [flight.index for flight in flights if flight.change == -1] #qua da vedere se index o slot.index
         for i in range(len(x)):
             plt.plot([x[i], x[i]], [0, 8], 'k-')
     plt.show()

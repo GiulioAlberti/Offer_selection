@@ -36,13 +36,5 @@ class OffersChoice:
         for i in range(self.num_offers):
             if round(self.x[i].x) == 1:
                 self.offers[i].select_couples()
-                print(self.offers[i], self.offers[i].cost_reduction, "implies:")
-                for j in range(len(self.offers[i].flights_both)):
-                    print("The flight ", self.offers[i].flights_both[j], "(points earlier-later",
-                          self.offers[i].flights_both[j].earlier_points, self.offers[i].flights_both[j].later_points,
-                          ")",
-                          "is switched to", self.offers[i].new_indexes[j])
-                    if self.offers[i].flights_both[j].index < self.offers[i].new_indexes[j]:
-                        self.offers[i].flights_both[j].change = 1
-                    else:
-                        self.offers[i].flights_both[j].change = -1
+                print(self.offers[i], "has a cost reduction of", self.offers[i].cost_reduction)
+                self.offers[i].show_offer()

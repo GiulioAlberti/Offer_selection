@@ -1,5 +1,6 @@
-import numpy as np
+from __future__ import annotations
 
+import numpy as np
 from objects.airline import Airline
 
 
@@ -14,12 +15,12 @@ class Offer:
 
         self.flights_a = np.array([a_couple.fl_one, a_couple.fl_two])
         self.flights_b = np.array([b_couple.fl_one, b_couple.fl_two])
-        self.indexes_a = np.array([flight.index for flight in self.flights_a])
-        self.indexes_b = np.array([flight.index for flight in self.flights_b])
+        self.slots_a = np.array([flight.slot for flight in self.flights_a])
+        self.slots_b = np.array([flight.slot for flight in self.flights_b])
         self.flights_both = np.concatenate((self.flights_a, self.flights_b))
-        self.indexes_both = np.concatenate((self.indexes_a, self.indexes_b))
+        self.slots_both = np.concatenate((self.slots_a, self.slots_b))
         self.cost_reduction = None
-        self.new_indexes = []
+        self.new_slots = []
 
     def __str__(self):
         return self.name
@@ -27,7 +28,7 @@ class Offer:
     def __repr__(self):
         return self.name
 
-    def is_incompatible_with(self, other_offer):
+    def is_incompatible_with(self, other_offer: Offer):
         output = 0
         for flight in self.flights_both:
             if flight in other_offer.flights_both:
@@ -40,3 +41,7 @@ class Offer:
     def select_couples(self):
         self.a_couple.select_in_solution()
         self.b_couple.select_in_solution()
+
+    def show_offer(self):
+        for i in range(len(self.flights_both)):
+            print(self.flights_both[i], "switched from", self.flights_both[i].slot, "to", self.new_slots[i])

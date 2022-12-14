@@ -1,16 +1,19 @@
 import numpy as np
 
+from objects.slot import Slot
+
 
 class Flight:
 
-    def __init__(self, index, slot, airline, cost_coefficients, cost_kind, new_slot_times):
+    def __init__(self, slot: Slot, airline, cost_coefficients, cost_kind, new_slot_times):
 
-        self.name = "F" + airline.name + str(index)
+        self.name = "F" + airline.name + str(slot.index)
         self.airline = airline
         self.airline.flights.append(self)
-        self.index = index
-        self.eta = slot
-        self.sol = None
+        self.slot = slot
+        self.index = slot.index
+        self.eta = slot.old_time
+        self.min_cost_sol = None
         self.cost_kind = cost_kind
         self.new_slot_times = new_slot_times
 
@@ -48,16 +51,17 @@ class Flight:
         self.normCostVect = np.array([norm_cost_fun(t - self.eta) for t in self.new_slot_times])
 
     def assign_points(self):
-        if self.new_slot_times[self.index] > self.eta + self.margin:  # Oltre salto
+        if self.slot.time > self.eta + self.margin:  # Oltre salto
             self.later_points = -30
             # self.earlier_points = 1
-            self.earlier_points = 60 * self.slope + 2 * self.jump / (
-                        0.5 + self.new_slot_times[self.index] - self.eta - self.margin)
+            self.earlier_points = 30 * self.slope + 1 * self.jump / (
+                        0.5 + self.slot.time - self.eta - self.margin)
+
 
         else:  # prima del salto
             # self.later_points = 1
-            self.later_points = 60 * (1 / 6 - self.slope) + 2 * (
-                    self.eta + self.margin - self.new_slot_times[self.index]) / self.jump
+            self.later_points = 30 * (1 / 6 - self.slope) + 1 * (
+                    self.eta + self.margin - self.slot.time) / self.jump
             self.earlier_points = -30
 
     def select_flight(self):
