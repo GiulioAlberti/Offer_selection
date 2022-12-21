@@ -34,7 +34,7 @@ class Flight:
             cost_fun = lambda delay: 0 if delay < 0 else (self.cost * delay ** 2) / 2
         elif cost_kind == "smj":
             cost_fun = lambda delay: 0 if delay < 0 else (
-                    self.slope * delay + (0 if delay <= self.margin else self.jump))
+                    self.slope * delay + (0 if delay < self.margin else self.jump))
         else:
             cost_fun = lambda delay: 0 if delay < 0 else self.cost * delay
 
@@ -51,18 +51,21 @@ class Flight:
         self.normCostVect = np.array([norm_cost_fun(t - self.eta) for t in self.new_slot_times])
 
     def assign_points(self):
-        if self.slot.time > self.eta + self.margin:  # Oltre salto
-            self.later_points = -30
-            # self.earlier_points = 1
-            self.earlier_points = 30 * self.slope + 1 * self.jump / (
-                        0.5 + self.slot.time - self.eta - self.margin)
+        if self.slot.time >= self.eta + self.margin:  # Oltre salto
+            # self.later_points = -30
+            # self.earlier_points = 30 * self.slope + 1 * self.jump / (
+            #             0.5 + self.slot.time - self.eta - self.margin)
 
+            self.later_points = 0
+            self.earlier_points = 1
 
         else:  # prima del salto
-            # self.later_points = 1
-            self.later_points = 30 * (1 / 6 - self.slope) + 1 * (
-                    self.eta + self.margin - self.slot.time) / self.jump
-            self.earlier_points = -30
+            # self.later_points = 30 * (1 / 6 - self.slope) + 1 * (
+            #         self.eta + self.margin - self.slot.time) / self.jump
+            # self.earlier_points = -30
+
+            self.later_points = 0
+            self.earlier_points = 0
 
     def select_flight(self):
         self.is_selected = True

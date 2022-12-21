@@ -5,7 +5,8 @@ from gurobipy import GRB, quicksum
 
 class OffersChoice:
 
-    def __init__(self, offers_list):
+    def __init__(self, offers_list, cut):
+        self.cut = cut
         self.p = gb.Model()
         self.p.modelSense = GRB.MAXIMIZE
         self.offers = offers_list
@@ -37,4 +38,4 @@ class OffersChoice:
             if round(self.x[i].x) == 1:
                 self.offers[i].select_couples()
                 print(self.offers[i], "has a cost reduction of", self.offers[i].cost_reduction)
-                self.offers[i].show_offer()
+                self.offers[i].show_offer(self.cut)

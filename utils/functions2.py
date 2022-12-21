@@ -30,6 +30,6 @@ def make_combinations_and_solve(airline_list, air_couples, new_slot_times, cut):
         make_offers(offers_list, couple, new_slot_times)
     num_off = len(offers_list)
     print(num_off, " offers created")
-    offers_choice = OffersChoice(offers_list)
+    offers_choice = OffersChoice(offers_list, cut)
     offers_choice.solve()
     return num_off, offers_choice.sol

@@ -7,7 +7,7 @@ from objects.airline import Airline
 class Offer:
 
     def __init__(self, number, airline_a: Airline, airline_b: Airline, a_couple, b_couple):
-        self.name = str(number) + airline_a.name + airline_b.name
+        self.name = str(number) +"-"+ airline_a.name +"-"+airline_b.name
         self.airline_a = airline_a
         self.airline_b = airline_b
         self.a_couple = a_couple
@@ -42,6 +42,8 @@ class Offer:
         self.a_couple.select_in_solution()
         self.b_couple.select_in_solution()
 
-    def show_offer(self):
+    def show_offer(self, cut):
         for i in range(len(self.flights_both)):
             print(self.flights_both[i], "switched from", self.flights_both[i].slot, "to", self.new_slots[i])
+            if not cut:
+                self.flights_both[i].slot = self.new_slots[i]
