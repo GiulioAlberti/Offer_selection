@@ -8,22 +8,25 @@ from utils.initializer import make_flights, make_couples_air
 
 s_, tot_in, noc, nob, cr, br = np.array([]), np.array([]), np.array([]), np.array([]), np.array([]), np.array([])
 
-for seed in range(10, 60):
+for seed in range(110, 140):
     print('Seed:', seed)
-    instance = InstanceGenerator(seed=seed, num_flights=65, interval=1, interval_modifier=2, cost_kind="smj")
+    instance = InstanceGenerator(seed=seed, num_flights=70, interval=1, interval_modifier=2, cost_kind="smj")
 
     flights, airline_list = make_flights(instance)
     for airline in airline_list:
         airline.optimise_own_flights()
         print("Number of flights:",airline, len(airline.flights))
+
     costs = []
+    num_after_jump = 0
     for flight in flights:
-        # print(flight.costVect)
         flight.assign_points()
-        # print(flight, flight.slot)
-        print(flight, flight.slot, #flight.slope, flight.margin, flight.jump,
-              flight.slot.time >= flight.eta + flight.margin)
+        # print(flight, flight.slot, flight.slope, flight.margin, flight.jump,
+        #       flight.slot.time >= flight.eta + flight.margin)
+        if flight.slot.time >= flight.eta + flight.margin:
+            num_after_jump+=1
         costs.append(flight.costVect[flight.slot.index])
+    print("After jump", num_after_jump)
 
     air_couples = make_couples_air(airline_list)
 
@@ -57,13 +60,13 @@ df = pd.DataFrame(
 df['cut_over_total'] = df.cut_reduction / df.total_initial
 df['best_over_total'] = df.best_reduction / df.total_initial
 df['off_cut_over_best'] = df.num_off_cut / df.num_off_best
-df.to_csv('new.csv', index_label=False, index=False)
+df.to_csv('new70.csv', index_label=False, index=False)
 
 df2 = pd.DataFrame(
     {'cut_over_total_mean': np.array([df['cut_over_total'].mean()]),
      'best_over_total_mean': np.array([df['best_over_total'].mean()]),
      'off_cut_over_best_mean': np.array([df['off_cut_over_best'].mean()])})
-df2.to_csv('new.csv', index_label=False, index=False, mode='a')
+df2.to_csv('new70.csv', index_label=False, index=False, mode='a')
 
 # pd.read_csv('namefile.csv')
 

@@ -44,6 +44,8 @@ class Offer:
 
     def show_offer(self, cut):
         for i in range(len(self.flights_both)):
-            print(self.flights_both[i], "switched from", self.flights_both[i].slot, "to", self.new_slots[i])
+            print(self.flights_both[i], "switched from", self.flights_both[i].slot, "to", self.new_slots[i],
+                  "Was after jump:", self.flights_both[i].slot.time >= self.flights_both[i].eta + self.flights_both[i].margin)
             if not cut:
                 self.flights_both[i].slot = self.new_slots[i]
+                print("Is after jump:",self.flights_both[i].slot.time >= self.flights_both[i].eta + self.flights_both[i].margin)
