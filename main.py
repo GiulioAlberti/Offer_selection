@@ -8,9 +8,9 @@ from utils.initializer import make_flights, make_couples_air
 
 s_, tot_in, noc, nob, cr, br = np.array([]), np.array([]), np.array([]), np.array([]), np.array([]), np.array([])
 
-for seed in range(110, 140):
+for seed in range(44, 54):
     print('Seed:', seed)
-    instance = InstanceGenerator(seed=seed, num_flights=70, interval=1, interval_modifier=2, cost_kind="smj")
+    instance = InstanceGenerator(seed=seed, num_flights=50, interval=1, interval_modifier=2, cost_kind="smj")
 
     flights, airline_list = make_flights(instance)
     for airline in airline_list:
@@ -24,26 +24,29 @@ for seed in range(110, 140):
         # print(flight, flight.slot, flight.slope, flight.margin, flight.jump,
         #       flight.slot.time >= flight.eta + flight.margin)
         if flight.slot.time >= flight.eta + flight.margin:
-            num_after_jump+=1
+            num_after_jump += 1
         costs.append(flight.costVect[flight.slot.index])
     print("After jump", num_after_jump)
-
     air_couples = make_couples_air(airline_list)
 
     total_initial = sum_costs(flights)
 
     num_off_cut, Cut_reduction = make_combinations_and_solve(airline_list, air_couples, instance.new_slot_times, True)
+
+    for flight in flights:
+        flight.deselect_flight()
+
     num_off_best, Best_reduction = make_combinations_and_solve(airline_list, air_couples, instance.new_slot_times,
                                                                False)
     costs_after_istop_base = []
     for flight in flights:
-        print(flight, flight.slot, flight.slot.time >= flight.eta + flight.margin)
+        # print(flight, flight.slot, flight.slot.time >= flight.eta + flight.margin)
         costs_after_istop_base.append(flight.costVect[flight.slot.index])
     for i in range(len(costs)):
         if costs_after_istop_base[i] - costs[i] != 0:
             print(flights[i], costs_after_istop_base[i] - costs[i])
 
-    # couples_eval(airline_list)
+    couples_eval(airline_list)
 
     tot_in = np.append(tot_in, total_initial)
     s_ = np.append(s_, seed)
@@ -60,13 +63,13 @@ df = pd.DataFrame(
 df['cut_over_total'] = df.cut_reduction / df.total_initial
 df['best_over_total'] = df.best_reduction / df.total_initial
 df['off_cut_over_best'] = df.num_off_cut / df.num_off_best
-df.to_csv('new70.csv', index_label=False, index=False)
+df.to_csv('a.csv', index_label=False, index=False)
 
 df2 = pd.DataFrame(
     {'cut_over_total_mean': np.array([df['cut_over_total'].mean()]),
      'best_over_total_mean': np.array([df['best_over_total'].mean()]),
      'off_cut_over_best_mean': np.array([df['off_cut_over_best'].mean()])})
-df2.to_csv('new70.csv', index_label=False, index=False, mode='a')
+df2.to_csv('a.csv', index_label=False, index=False, mode='a')
 
 # pd.read_csv('namefile.csv')
 

@@ -36,9 +36,9 @@ class Airline:
             for i in range(len(self.flights)):
                 for j in range(i + 1, len(self.flights)):
                     max_points = max(self.flights[i].earlier_points + self.flights[j].later_points,
-                                     self.flights[i].later_points + self.flights[j].earlier_points)
+                                     self.flights[i].later_points + self.flights[j].earlier_points) #qua modificare aggiungengo caso con doppio anticipo con un volo in uno slot cand
                     if cut:
-                        if max_points > 0:
+                        if max_points > 6:
                             self.flights_couples.append(FlightsCouple(self.flights[i], self.flights[j], max_points))
                     else:
                         self.flights_couples.append(FlightsCouple(self.flights[i], self.flights[j], max_points))

@@ -40,7 +40,7 @@ class Flight:
 
         self.costVect = np.array([cost_fun(t - self.eta) for t in self.new_slot_times])
         self.is_selected = False
-        self.change = 0
+        self.candidate_slots = []
 
     def normalise(self, max_cost):
         self.norm_cost = self.cost / max_cost
@@ -50,25 +50,29 @@ class Flight:
             norm_cost_fun = lambda delay: 0 if delay < 0 else self.norm_cost * delay
         self.normCostVect = np.array([norm_cost_fun(t - self.eta) for t in self.new_slot_times])
 
-    def assign_points(self):
+    def assign_points(self): #se consideriamo doppio salto forse 3 casistiche
         if self.slot.time >= self.eta + self.margin:  # Oltre salto
-            # self.later_points = -30
-            # self.earlier_points = 30 * self.slope + 1 * self.jump / (
-            #             0.5 + self.slot.time - self.eta - self.margin)
+            self.later_points = -30
+            self.earlier_points = 30 * self.slope + 1 * self.jump / (
+                        0.5 + self.slot.time - self.eta - self.margin)
 
-            self.later_points = 0
-            self.earlier_points = 1
 
         else:  # prima del salto
-            # self.later_points = 30 * (1 / 6 - self.slope) + 1 * (
-            #         self.eta + self.margin - self.slot.time) / self.jump
-            # self.earlier_points = -30
+            self.later_points = 30 * (1 / 6 - self.slope) + 1 * (
+                    self.eta + self.margin - self.slot.time) / self.jump
+            self.earlier_points = 30 * self.slope
 
-            self.later_points = 0
-            self.earlier_points = 0
 
     def select_flight(self):
         self.is_selected = True
+
+    def deselect_flight(self):
+        self.is_selected = False
+
+    def compute_candidate_slots(self, slots):
+        for slot in slots:
+            if 0 < self.eta + self.margin - slot.time < 6:
+                self.candidate_slots.append(slot)
 
     def __repr__(self):
         return self.name

@@ -12,11 +12,11 @@ def couples_eval(airline_list):
 
     figure, (ax, ax2) = plt.subplots(ncols=2, sharey="all")
     ax.plot(values_used, 'g s')
-    ax.axhline(y=-5)
-    ax.set_title("Used")
+    ax.axhline(y=6)
+    ax.set_title("Used in base istop")
     ax2.plot(values_not_used, 'r s')
-    ax2.axhline(y=-5)
-    ax2.set_title("Not Used")
+    ax2.axhline(y=6)
+    ax2.set_title("Not Used in base istop")
     plt.show()
     plt.clf()
 
